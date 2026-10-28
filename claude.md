@@ -88,7 +88,7 @@ src/
     Assets.luau                 asset ids (icons, sounds)
     Lessons/
       Index.luau                module metadata (title, era) in portal order
-      Classifiers.luau  HMM.luau  RNN.luau  Attention.luau  Transformers.luau
+      Classifiers.luau  HMM.luau  RNN.luau  Attention.luau  Transformers.luau  (Index maps module → file)
       Glossary.luau
     Math/                       pure functions, no instances
       Prob.luau                 sigmoid, softmax, log-loss, Naive Bayes posterior
@@ -116,7 +116,7 @@ src/
                                 ProgressBar, Toast, Tooltip, Modal, Callout, FormulaBlock, Legend,
                                 Glyph (frame-drawn placeholder icons, e.g. the lock)
       Cards/                    one renderer per card kind
-      Widgets/                  one file per interactive demo (§7)
+      Widgets/                  one file per interactive demo (§7); Plot.luau is a shared plotting helper
 tools/
   BuildAtrium.luau              not synced; rebuilds the Atrium + portals via execute_luau (Edit)
 ```

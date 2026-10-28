@@ -22,9 +22,8 @@ local META: { [string]: { title: string, era: string } } = {
 }
 
 -- Content file (a ModuleScript in this folder) per module. Modules without one aren't playable yet.
--- Preview exercises every card kind and stands in for Module 1 until Milestone 3 replaces it.
 local CONTENT: { [string]: string } = {
-	classifiers = "Preview",
+	classifiers = "Classifiers",
 }
 
 local Index = {}

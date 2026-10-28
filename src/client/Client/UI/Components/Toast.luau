@@ -187,14 +187,21 @@ function Toast.show(text: string, options: Options?)
 			Parent = root,
 		})
 		root.Parent = parent
-		current = { root = root, label = label, icon = nil, text = text, token = myToken, kind = kind, textScale = opts.textScale or 1 }
+		current = {
+			root = root,
+			label = label,
+			icon = nil,
+			text = text,
+			token = myToken,
+			kind = kind,
+			textScale = opts.textScale or 1,
+		}
 		layout(current)
 
 		TweenService:Create(root, Theme.ease.state, {
 			GroupTransparency = 0,
 			Position = UDim2.new(0.5, 0, 0, TOP_OFFSET),
 		}):Play()
-
 	end
 
 	local entry = current :: Entry

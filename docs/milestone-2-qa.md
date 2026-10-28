@@ -3,6 +3,7 @@
 Implemented and playtested on October 28, 2026 in Studio's existing `Place2`.
 Portal 1 uses the 11-card preview; full Module 1 content remains Milestone 3.
 Saved-place persistence verification passed across three separate Studio play sessions after API access was enabled.
+The later [milestones 0–2 audit](milestones-0-2-audit.md) adds fixes and current verification limits; use it for the final sign-off status.
 
 ## Fixes
 
