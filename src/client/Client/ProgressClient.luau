@@ -71,8 +71,34 @@ function ProgressClient.report(report: Types.LessonReport)
 	(remotes:WaitForChild("ReportLesson") :: RemoteEvent):FireServer(report)
 end
 
-function ProgressClient.saveSettings(settings: { [string]: any })
-	(remotes:WaitForChild("SaveSettings") :: RemoteEvent):FireServer(settings)
+local settingsListeners: { (Types.Settings) -> () } = {}
+
+-- Applies settings locally right away (the server doesn't echo them back), then saves them.
+function ProgressClient.setSettings(patch: { [string]: any })
+	assert(current, "ProgressClient.start hasn't finished")
+	local settings = current.progress.settings :: any
+	for key, value in patch do
+		if key ~= "seenIntro" then
+			settings[key] = value
+		end
+	end
+	if patch.seenIntro == true then
+		current.progress.seenIntro = true
+	end
+	for _, fn in table.clone(settingsListeners) do
+		task.spawn(fn, current.progress.settings)
+	end
+	(remotes:WaitForChild("SaveSettings") :: RemoteEvent):FireServer(patch)
+end
+
+function ProgressClient.onSettingsChanged(fn: (Types.Settings) -> ()): () -> ()
+	table.insert(settingsListeners, fn)
+	return function()
+		local i = table.find(settingsListeners, fn)
+		if i then
+			table.remove(settingsListeners, i)
+		end
+	end
 end
 
 return ProgressClient

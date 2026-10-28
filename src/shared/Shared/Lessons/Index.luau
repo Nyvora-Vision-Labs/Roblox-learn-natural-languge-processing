@@ -1,9 +1,10 @@
 --!strict
--- Module metadata in portal order. Card content lives in one file per module (added per milestone).
+-- Module metadata in portal order, and which content file each module uses.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local Types = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Types"))
 
 export type ModuleMeta = {
 	id: string,
@@ -18,6 +19,12 @@ local META: { [string]: { title: string, era: string } } = {
 	rnn = { title = "RNNs & LSTMs", era = "1986–1997" },
 	attention = { title = "Attention", era = "2014" },
 	transformers = { title = "Transformers", era = "2017" },
+}
+
+-- Content file (a ModuleScript in this folder) per module. Modules without one aren't playable yet.
+-- Preview exercises every card kind and stands in for Module 1 until Milestone 3 replaces it.
+local CONTENT: { [string]: string } = {
+	classifiers = "Preview",
 }
 
 local Index = {}
@@ -38,6 +45,15 @@ end
 function Index.at(order: number): ModuleMeta?
 	local id = Config.MODULE_ORDER[order]
 	return if id then byId[id] else nil
+end
+
+-- Returns the module's cards, or nil if its content hasn't been written yet.
+function Index.content(moduleId: string): Types.Module?
+	local name = CONTENT[moduleId]
+	if not name then
+		return nil
+	end
+	return require(script.Parent:WaitForChild(name)) :: any
 end
 
 return Index

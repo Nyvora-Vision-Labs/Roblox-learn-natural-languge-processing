@@ -41,6 +41,7 @@ Theme.font = {
 	bold = Font.fromName("BuilderSans", Enum.FontWeight.Bold),
 	extraBold = Font.fromName("BuilderSans", Enum.FontWeight.ExtraBold),
 	mono = Font.fromName("Inconsolata"),
+	monoBold = Font.fromName("Inconsolata", Enum.FontWeight.Bold),
 }
 
 export type TextStyle = { font: Font, size: number, lineHeight: number }
@@ -100,9 +101,21 @@ Theme.ease = {
 Theme.stage = Vector2.new(1280, 720)
 Theme.maxScale = 1.35
 Theme.compactBelow = 0.75
-Theme.compactTextMultiplier = 1.5
+Theme.compactTextMultiplier = 1.5 -- floor; raised further so body text stays readable (below)
+Theme.minBodyScreenPx = 15 -- body text never renders smaller than this on screen (§6.2: 14–30)
 Theme.minTapTarget = 48 -- reference px
 Theme.minTapPoints = 44 -- on-screen points
 Theme.textColumnMaxWidth = 640
+
+-- Lesson screen
+Theme.lesson = {
+	barPadding = 12, -- above and below the tallest control in the top/bottom bars
+	textColumn = 0.4, -- share of the body width for the text column on two-column cards
+	backdropTransparency = 0.12,
+	blurSize = 18,
+	displayOrderBackdrop = 20,
+	displayOrderUI = 21,
+	celebrateDuration = 0.6,
+}
 
 return Theme

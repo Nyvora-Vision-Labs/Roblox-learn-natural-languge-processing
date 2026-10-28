@@ -34,7 +34,11 @@ function Scale.compute(viewport: Vector2): ScaleState
 	return {
 		scale = scale,
 		compact = compact,
-		textMultiplier = if compact then Theme.compactTextMultiplier else 1,
+		-- In compact mode, multiply text by at least compactTextMultiplier, and by more if
+		-- needed to keep body text at minBodyScreenPx on screen.
+		textMultiplier = if compact
+			then math.max(Theme.compactTextMultiplier, Theme.minBodyScreenPx / (Theme.text.body.size * scale))
+			else 1,
 		minTapTarget = math.max(Theme.minTapTarget, Theme.minTapPoints / scale),
 	}
 end
@@ -50,6 +54,7 @@ function Scale.attach(screenGui: ScreenGui, stage: GuiObject): ScaleHandle
 
 	local listeners: { (ScaleState) -> () } = {}
 	local state = Scale.compute(screenGui.AbsoluteSize)
+	local lastViewport = screenGui.AbsoluteSize
 
 	local function apply()
 		local viewport = screenGui.AbsoluteSize
@@ -61,8 +66,9 @@ function Scale.attach(screenGui: ScreenGui, stage: GuiObject): ScaleHandle
 			stage.Size = UDim2.fromOffset(Theme.stage.X, Theme.stage.Y)
 		end
 
-		local changed = nextState.scale ~= state.scale or nextState.compact ~= state.compact
+		local changed = nextState.scale ~= state.scale or nextState.compact ~= state.compact or viewport ~= lastViewport
 		state = nextState
+		lastViewport = viewport
 		if changed then
 			for _, fn in table.clone(listeners) do
 				task.spawn(fn, state)

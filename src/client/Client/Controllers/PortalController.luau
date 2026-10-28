@@ -359,10 +359,6 @@ local function updateSign(portal: Portal, state: PortalState)
 			setIcon(portal.centerIcon, Glyph.lock(120, Theme.color.textMuted, Theme.color.bg))
 		elseif state == "completed" then
 			setIcon(portal.centerIcon, Glyph.text(120, "✓", Theme.color.text, Theme.font.extraBold))
-			local label = portal.centerIcon:FindFirstChildWhichIsA("TextLabel", true)
-			if label then
-				label.TextSize = 180 -- the ✓ glyph sits small in its em box
-			end
 		else
 			setIcon(portal.centerIcon, nil)
 		end
