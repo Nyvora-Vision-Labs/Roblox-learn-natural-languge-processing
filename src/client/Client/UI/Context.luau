@@ -28,6 +28,12 @@ function Context.metrics(state: Scale.ScaleState, textScale: number): Metrics
 	for name, style in Theme.text do
 		text[name] = math.floor(style.size * state.textMultiplier * textScale + 0.5)
 	end
+	-- Keep the readability range after the stage scale and the text-size preference.
+	text.body = math.clamp(
+		text.body,
+		math.ceil(Theme.minBodyScreenPx / state.scale),
+		math.floor(Theme.maxBodyScreenPx / state.scale)
+	)
 	-- Controls grow with their label so larger text never overflows a button.
 	local tap = math.max(state.minTapTarget, text.label + 2 * Theme.space.lg)
 	return {

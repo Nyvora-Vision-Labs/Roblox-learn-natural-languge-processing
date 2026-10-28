@@ -537,6 +537,9 @@ local function refresh(animate: boolean)
 			else
 				applyState(portal, nextState)
 			end
+		elseif nextState == "completed" then
+			-- A better quiz score changes the sign without changing the portal's state.
+			updateSign(portal, nextState)
 		end
 	end
 end
@@ -713,8 +716,13 @@ function PortalController.setEnabled(on: boolean)
 		local queued = pendingUnlocks
 		pendingUnlocks = {}
 		for _, portal in queued do
-			portal.state = "open"
-			playUnlock(portal)
+			local state = stateFor(portal.moduleId)
+			portal.state = state
+			if state == "open" then
+				playUnlock(portal)
+			else
+				applyState(portal, state)
+			end
 		end
 	end
 end

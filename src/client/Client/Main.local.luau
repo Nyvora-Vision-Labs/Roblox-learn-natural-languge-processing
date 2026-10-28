@@ -52,6 +52,13 @@ DebugHooks.start({
 })
 
 local payload = ProgressClient.get()
+local lastPersistent = payload.persistent
+ProgressClient.onChanged(function(updated)
+	if lastPersistent and not updated.persistent then
+		toast("Progress won't be saved this session.", "warning")
+	end
+	lastPersistent = updated.persistent
+end)
 if not payload.persistent then
 	toast("Progress won't be saved this session.", "warning")
 end

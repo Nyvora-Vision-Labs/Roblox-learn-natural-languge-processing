@@ -103,9 +103,18 @@ Theme.maxScale = 1.35
 Theme.compactBelow = 0.75
 Theme.compactTextMultiplier = 1.5 -- floor; raised further so body text stays readable (below)
 Theme.minBodyScreenPx = 15 -- body text never renders smaller than this on screen (§6.2: 14–30)
+Theme.maxBodyScreenPx = 30
 Theme.minTapTarget = 48 -- reference px
 Theme.minTapPoints = 44 -- on-screen points
 Theme.textColumnMaxWidth = 640
+
+Theme.toast = {
+	topOffset = 96,
+	slide = 8,
+	duration = 2.8,
+	maxScreenWidth = 800,
+	font = Enum.Font.BuilderSans,
+}
 
 -- Lesson screen
 Theme.lesson = {

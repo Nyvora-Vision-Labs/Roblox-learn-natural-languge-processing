@@ -4,6 +4,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextService = game:GetService("TextService")
 local TweenService = game:GetService("TweenService")
 
 local Theme = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Theme"))
@@ -11,6 +12,7 @@ local Theme = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("The
 local UI = script.Parent.Parent
 local Create = require(UI:WaitForChild("Create"))
 local Scale = require(UI:WaitForChild("Scale"))
+local Context = require(UI:WaitForChild("Context"))
 local Glyph = require(script.Parent:WaitForChild("Glyph"))
 
 export type Kind = "info" | "warning" | "success" | "locked"
@@ -22,17 +24,28 @@ export type Options = {
 	textScale: number?,
 }
 
-local TOP_OFFSET = 96 -- reference px; leaves room for the journey tracker
-local SLIDE = 8
-local DEFAULT_DURATION = 2.8
+local TOP_OFFSET = Theme.toast.topOffset
+local SLIDE = Theme.toast.slide
+local DEFAULT_DURATION = Theme.toast.duration
+
+type Entry = {
+	root: CanvasGroup,
+	label: TextLabel,
+	icon: Frame?,
+	text: string,
+	token: number,
+	kind: Kind,
+	textScale: number,
+}
 
 local Toast = {}
 
 local gui: ScreenGui? = nil
 local stage: Frame? = nil
 local scaleHandle: Scale.ScaleHandle? = nil
-local current: { root: CanvasGroup, text: string, token: number }? = nil
+local current: Entry? = nil
 local token = 0
+local layout: (Entry) -> ()
 
 local function ensureGui(): (ScreenGui, Frame)
 	if gui and stage and gui.Parent then
@@ -53,6 +66,11 @@ local function ensureGui(): (ScreenGui, Frame)
 	})
 	scaleHandle = Scale.attach(screen, frame)
 	gui, stage = screen, frame
+	scaleHandle:onChanged(function()
+		if current then
+			layout(current)
+		end
+	end)
 	return screen, frame
 end
 
@@ -67,7 +85,33 @@ local function iconFor(kind: Kind, size: number): Frame
 	return Glyph.text(size, "•", Theme.color.textMuted, Theme.font.bold)
 end
 
-local function hide(entry: { root: CanvasGroup, text: string, token: number }, reducedMotion: boolean)
+layout = function(entry: Entry)
+	if not entry.root.Parent or not gui or not scaleHandle then
+		return
+	end
+	local state = scaleHandle:get()
+	local textSize = Context.metrics(state, entry.textScale).text.body
+	local iconSize = math.ceil(textSize * 0.9)
+	local maxWidth = math.max(1, math.min(
+		Theme.toast.maxScreenWidth / state.scale,
+		gui.AbsoluteSize.X / state.scale - 2 * Theme.space.xl
+	))
+	local chrome = Theme.space.lg + Theme.space.xl + Theme.space.md + iconSize
+	local plain = entry.text:gsub("<[^>]+>", "")
+	local bounds = TextService:GetTextSize(plain, textSize, Theme.toast.font, Vector2.new(math.huge, math.huge))
+	entry.root.Size = UDim2.fromOffset(math.min(maxWidth, math.ceil(bounds.X) + chrome + Theme.space.xs), 0)
+	entry.label.TextSize = textSize
+	entry.label.Size = UDim2.new(1, -(iconSize + Theme.space.md), 0, 0)
+	if entry.icon then
+		entry.icon:Destroy()
+	end
+	local icon = iconFor(entry.kind, iconSize)
+	icon.LayoutOrder = 1
+	icon.Parent = entry.root
+	entry.icon = icon
+end
+
+local function hide(entry: Entry, reducedMotion: boolean)
 	local info = TweenInfo.new(Theme.duration.state, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 	local goal: { [string]: any } = { GroupTransparency = 1 }
 	if not reducedMotion then
@@ -92,20 +136,19 @@ function Toast.show(text: string, options: Options?)
 	-- Same message already showing: keep it, restart its timer.
 	if current and current.text == text and current.root.Parent then
 		current.token = myToken
+		current.kind = kind
+		current.textScale = opts.textScale or 1
+		layout(current)
 	else
 		if current and current.root.Parent then
 			hide(current, reducedMotion)
 		end
 		local _, parent = ensureGui()
-		local state = (scaleHandle :: Scale.ScaleHandle):get()
-		local textSize = math.floor(Theme.text.body.size * state.textMultiplier * (opts.textScale or 1) + 0.5)
-		local iconSize = math.floor(textSize * 0.9 + 0.5)
-
 		local root = Create("CanvasGroup", {
 			Name = "Toast",
 			AnchorPoint = Vector2.new(0.5, 0),
 			Position = UDim2.new(0.5, 0, 0, TOP_OFFSET - (if reducedMotion then 0 else SLIDE)),
-			AutomaticSize = Enum.AutomaticSize.XY,
+			AutomaticSize = Enum.AutomaticSize.Y,
 			Size = UDim2.fromOffset(0, 0),
 			BackgroundColor3 = Theme.color.surfaceRaised,
 			GroupTransparency = 1,
@@ -129,33 +172,32 @@ function Toast.show(text: string, options: Options?)
 				SortOrder = Enum.SortOrder.LayoutOrder,
 			}),
 		})
-		local icon = iconFor(kind, iconSize)
-		icon.LayoutOrder = 1
-		icon.Parent = root
-		Create("TextLabel", {
+		local label = Create("TextLabel", {
 			Name = "Text",
 			LayoutOrder = 2,
-			AutomaticSize = Enum.AutomaticSize.XY,
+			AutomaticSize = Enum.AutomaticSize.Y,
 			Size = UDim2.fromOffset(0, 0),
 			BackgroundTransparency = 1,
 			RichText = true,
 			Text = text,
+			TextWrapped = true,
+			LineHeight = Theme.text.body.lineHeight,
 			TextColor3 = Theme.color.text,
-			FontFace = Theme.text.body.font,
-			TextSize = textSize,
+			FontFace = Font.fromEnum(Theme.toast.font),
 			Parent = root,
 		})
 		root.Parent = parent
+		current = { root = root, label = label, icon = nil, text = text, token = myToken, kind = kind, textScale = opts.textScale or 1 }
+		layout(current)
 
 		TweenService:Create(root, Theme.ease.state, {
 			GroupTransparency = 0,
 			Position = UDim2.new(0.5, 0, 0, TOP_OFFSET),
 		}):Play()
 
-		current = { root = root, text = text, token = myToken }
 	end
 
-	local entry = current :: { root: CanvasGroup, text: string, token: number }
+	local entry = current :: Entry
 	task.delay(duration, function()
 		if entry.token == myToken and entry.root.Parent then
 			hide(entry, reducedMotion)

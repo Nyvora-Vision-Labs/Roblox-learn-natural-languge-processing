@@ -875,6 +875,10 @@ function LessonController.open(moduleId: string, startCard: number?, opts: OpenO
 	}
 	session = s
 	cleanup:add(function()
+		if s.view then
+			s.view.destroy()
+			s.view = nil
+		end
 		s.shellCleanup:destroy()
 	end)
 

@@ -31,6 +31,7 @@ type Session = {
 	progress: Progress,
 	loaded: boolean,
 	persistent: boolean,
+	canSave: boolean, -- false only when loading failed; never overwrite unread stored data
 	dirty: boolean,
 	saving: boolean,
 	saveQueued: boolean,
@@ -273,6 +274,7 @@ local function load(player: Player)
 		progress = ProgressService.default(),
 		loaded = false,
 		persistent = backend.name == "datastore",
+		canSave = true,
 		dirty = false,
 		saving = false,
 		saveQueued = false,
@@ -291,6 +293,7 @@ local function load(player: Player)
 	else
 		-- Never save over data we couldn't read.
 		session.persistent = false
+		session.canSave = false
 	end
 	session.loaded = true
 	pushProgress(player, session)
@@ -298,7 +301,7 @@ end
 
 -- Writes the session to the backend. overwrite = true replaces stored data (used by reset).
 local function save(player: Player, session: Session, overwrite: boolean?)
-	if backend.name == "datastore" and not session.persistent then
+	if not session.canSave then
 		return
 	end
 	if session.saving then
@@ -318,13 +321,19 @@ local function save(player: Player, session: Session, overwrite: boolean?)
 		end)
 	end)
 
+	local wasPersistent = session.persistent
 	if ok then
 		-- Pick up anything another server saved, keeping changes made during the save.
 		session.progress = ProgressService.merge(ProgressService.sanitize(stored), session.progress)
+		session.persistent = backend.name == "datastore"
 	else
 		session.dirty = true
+		session.persistent = false
 	end
 	session.saving = false
+	if session.persistent ~= wasPersistent then
+		pushProgress(player, session)
+	end
 
 	if session.saveQueued then
 		session.saveQueued = false
