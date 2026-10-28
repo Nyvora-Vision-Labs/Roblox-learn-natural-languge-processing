@@ -15,10 +15,22 @@ local ProgressClient = {}
 
 local current: ProgressPayload? = nil
 local listeners: { (ProgressPayload) -> () } = {}
+local settingsListeners: { (Types.Settings) -> () } = {}
 local remotes: Folder
 
 local function set(payload: ProgressPayload)
+	local previous = current and current.progress.settings
+	local settings = payload.progress.settings
 	current = payload
+	if previous and (
+		previous.textScale ~= settings.textScale
+		or previous.reducedMotion ~= settings.reducedMotion
+		or previous.muted ~= settings.muted
+	) then
+		for _, fn in table.clone(settingsListeners) do
+			task.spawn(fn, settings)
+		end
+	end
 	for _, fn in table.clone(listeners) do
 		task.spawn(fn, payload)
 	end
@@ -70,8 +82,6 @@ end
 function ProgressClient.report(report: Types.LessonReport)
 	(remotes:WaitForChild("ReportLesson") :: RemoteEvent):FireServer(report)
 end
-
-local settingsListeners: { (Types.Settings) -> () } = {}
 
 -- Applies settings locally right away (the server doesn't echo them back), then saves them.
 function ProgressClient.setSettings(patch: { [string]: any })
