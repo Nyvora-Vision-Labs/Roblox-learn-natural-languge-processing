@@ -15,6 +15,7 @@ local Text = require(UI:WaitForChild("Text"))
 local Components = UI:WaitForChild("Components")
 local Button = require(Components:WaitForChild("Button"))
 local Callout = require(Components:WaitForChild("Callout"))
+local Sound = require(UI:WaitForChild("Sound"))
 local Common = require(script.Parent:WaitForChild("Common"))
 
 local Quiz = {}
@@ -103,6 +104,7 @@ function Quiz.render(ctx: Common.CardCtx, card: Types.Card): Common.CardView
 			return
 		end
 		ctx.quiz.choose(card.id, original)
+		Sound.play(if original == card.answer then "correct" else "incorrect")
 		render(true)
 		ctx.onChanged()
 	end

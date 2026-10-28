@@ -10,10 +10,15 @@ local ProgressClient = require(Client:WaitForChild("ProgressClient"))
 local DebugHooks = require(Client:WaitForChild("DebugHooks"))
 local PortalController = require(Controllers:WaitForChild("PortalController"))
 local LessonController = require(Controllers:WaitForChild("LessonController"))
+local HudController = require(Controllers:WaitForChild("HudController"))
+local Sound = require(Client:WaitForChild("UI"):WaitForChild("Sound"))
 local Toast = require(Client:WaitForChild("UI"):WaitForChild("Components"):WaitForChild("Toast"))
 
 local remotes = ReplicatedStorage:WaitForChild("Remotes") :: Folder
 ProgressClient.start(remotes)
+Sound.setMutedGetter(function()
+	return ProgressClient.get().progress.settings.muted
+end)
 
 local function toast(text: string, kind: string?)
 	local settings = ProgressClient.get().progress.settings
@@ -34,6 +39,11 @@ PortalController.start({
 	onEnterLocked = function(_moduleId: string, message: string)
 		toast(message, "locked")
 	end,
+})
+
+HudController.start({
+	progress = ProgressClient,
+	portals = PortalController,
 })
 
 -- Reduced motion changes how portals animate.

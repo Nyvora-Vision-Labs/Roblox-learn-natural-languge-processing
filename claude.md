@@ -89,7 +89,7 @@ src/
     Lessons/
       Index.luau                module metadata (title, era) in portal order
       Classifiers.luau  HMM.luau  RNN.luau  Attention.luau  Transformers.luau  (Index maps module → file)
-      Glossary.luau
+      Glossary.luau  Welcome.luau (first-visit cards)  Graduation.luau (§7.7 recap)
     Math/                       pure functions, no instances
       Prob.luau                 sigmoid, softmax, log-loss, Naive Bayes posterior
       Linear.luau               small vector/matrix helpers
@@ -112,6 +112,7 @@ src/
       Create.luau               instance factory: Create(className, props, children)
       Cleanup.luau              tracks connections/instances; one call cleans up
       Scale.luau                UIScale + compact mode (§6.2)
+      Sound.luau                UI sounds; respects the Sound setting
       Components/               Button, IconButton, Chip, Slider, Toggle, SegmentedControl,
                                 ProgressBar, Toast, Tooltip, Modal, Callout, FormulaBlock, Legend,
                                 Glyph (frame-drawn placeholder icons, e.g. the lock)

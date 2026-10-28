@@ -5,11 +5,9 @@
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local Assets = require(Shared:WaitForChild("Assets"))
 local Config = require(Shared:WaitForChild("Config"))
 local Theme = require(Shared:WaitForChild("Theme"))
 local Index = require(Shared:WaitForChild("Lessons"):WaitForChild("Index"))
@@ -19,6 +17,7 @@ local Client = script.Parent.Parent
 local Cleanup = require(Client:WaitForChild("UI"):WaitForChild("Cleanup"))
 local Create = require(Client.UI:WaitForChild("Create"))
 local Glyph = require(Client.UI:WaitForChild("Components"):WaitForChild("Glyph"))
+local Sound = require(Client.UI:WaitForChild("Sound"))
 
 type PortalState = "locked" | "open" | "completed"
 
@@ -69,7 +68,7 @@ local portals: { [Model]: Portal } = {}
 local options: Options
 local enabled = true
 local pendingUnlocks: { Portal } = {}
-local lockedSound: Sound? = nil
+local graduated = false -- every module done: completed portals stay fully lit
 
 ---------------------------------------------------------------------------
 -- Helpers
@@ -437,14 +436,15 @@ local function applyState(portal: Portal, state: PortalState)
 		end
 		if portal.light then
 			portal.light.Enabled = true
-			portal.light.Brightness = 1
+			portal.light.Brightness = if graduated then 1.8 else 1
 		end
 		if portal.particles then
-			portal.particles.Rate = 2
+			portal.particles.Rate = if graduated then 4 else 2
 			portal.particles.Enabled = true
 		end
 		if portal.beam then
-			portal.beam.Enabled = false
+			-- After graduation every portal keeps its beam: the whole Atrium lights up.
+			portal.beam.Enabled = graduated
 		end
 	end
 
@@ -453,6 +453,7 @@ end
 
 -- Locked → open celebration: the path lights up toward the portal, then the portal flares.
 local function playUnlock(portal: Portal)
+	Sound.play("unlock")
 	if settings().reducedMotion then
 		applyState(portal, "open")
 		return
@@ -643,18 +644,7 @@ local function lockedMessage(portal: Portal): string
 end
 
 local function playLockedSound()
-	if settings().muted then
-		return
-	end
-	if not lockedSound then
-		local sound = Instance.new("Sound")
-		sound.Name = "PortalLocked"
-		sound.SoundId = Assets.sound.locked
-		sound.Volume = 0.35
-		sound.Parent = SoundService
-		lockedSound = sound
-	end
-	(lockedSound :: Sound):Play()
+	Sound.play("locked")
 end
 
 local function poll()
@@ -737,6 +727,15 @@ function PortalController.suppress(moduleId: string, seconds: number)
 end
 
 -- Re-applies every portal's look (e.g. after reduced motion changes).
+-- Lights every completed portal (beam on, brighter) once all modules are done.
+function PortalController.setGraduated(on: boolean)
+	if graduated == on then
+		return
+	end
+	graduated = on
+	PortalController.refreshAll()
+end
+
 function PortalController.refreshAll()
 	for _, portal in portals do
 		if portal.state then

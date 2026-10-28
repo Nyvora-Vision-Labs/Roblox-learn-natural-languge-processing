@@ -32,6 +32,7 @@ local Cards = UI:WaitForChild("Cards")
 local Common = require(Cards:WaitForChild("Common"))
 local Result = require(Cards:WaitForChild("Result"))
 local InputController = require(script.Parent:WaitForChild("InputController"))
+local Sound = require(UI:WaitForChild("Sound"))
 
 local RENDERERS: { [string]: { render: (Common.CardCtx, Types.Card) -> Common.CardView } } = {
 	concept = require(Cards:WaitForChild("Concept")),
@@ -288,6 +289,9 @@ local function resultData(s: Session): Result.Data
 		s.reported = true
 		s.best = math.max(s.best, value)
 		deps.progress.report({ kind = "completed", moduleId = s.moduleId, score = value })
+		if passed then
+			Sound.play("complete")
+		end
 	end
 	return {
 		score = value,

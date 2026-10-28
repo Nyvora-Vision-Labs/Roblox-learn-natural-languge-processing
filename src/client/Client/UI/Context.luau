@@ -34,6 +34,12 @@ function Context.metrics(state: Scale.ScaleState, textScale: number): Metrics
 		math.ceil(Theme.minBodyScreenPx / state.scale),
 		math.floor(Theme.maxBodyScreenPx / state.scale)
 	)
+	-- Labels and captions get a floor too, so phones never show button or caption text below
+	-- Theme.minSmallScreenPx (they were ~12–13 px on a phone in landscape before this).
+	local smallFloor = math.ceil(Theme.minSmallScreenPx / state.scale)
+	for _, name in { "label", "caption", "mono" } do
+		text[name] = math.max(text[name], smallFloor)
+	end
 	-- Controls grow with their label so larger text never overflows a button.
 	local tap = math.max(state.minTapTarget, text.label + 2 * Theme.space.lg)
 	return {
