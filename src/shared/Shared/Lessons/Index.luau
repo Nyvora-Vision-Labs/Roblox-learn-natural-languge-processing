@@ -24,6 +24,7 @@ local META: { [string]: { title: string, era: string } } = {
 -- Content file (a ModuleScript in this folder) per module. Modules without one aren't playable yet.
 local CONTENT: { [string]: string } = {
 	classifiers = "Classifiers",
+	hmm = "HMM",
 }
 
 local Index = {}

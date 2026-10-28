@@ -48,6 +48,42 @@ local Glossary: { [string]: { module: string, definition: string } } = {
 		module = "classifiers",
 		definition = "Learns P(y | x) directly, the boundary between classes, without modeling the data itself.",
 	},
+	-- Module 2
+	sequence = { module = "hmm", definition = "Data that comes in order, where earlier items affect later ones." },
+	["Markov chain"] = { module = "hmm", definition = "A model that moves between states, one step at a time, by fixed probabilities." },
+	["Markov assumption"] = {
+		module = "hmm",
+		definition = "The next state depends only on the current state, not on the ones before it.",
+	},
+	["transition matrix"] = {
+		module = "hmm",
+		definition = "A, where A(i, j) is the probability of moving from state i to state j. Each row sums to 1.",
+	},
+	["hidden state"] = { module = "hmm", definition = "A state you can't observe directly and must infer, like the weather in the diary." },
+	observation = { module = "hmm", definition = "What you actually see at each step, like the ice creams in the diary." },
+	["initial probabilities"] = { module = "hmm", definition = "π: the probability of starting in each state." },
+	["emission probabilities"] = {
+		module = "hmm",
+		definition = "B, where B(i, k) is the probability that state i produces observation k.",
+	},
+	generative = { module = "hmm", definition = "Models how the data is produced, so it scores (and can sample) whole sequences." },
+	["Forward algorithm"] = {
+		module = "hmm",
+		definition = "Computes the probability of an observation sequence by summing over all hidden paths, day by day.",
+	},
+	["Viterbi algorithm"] = {
+		module = "hmm",
+		definition = "Finds the single most likely hidden sequence by keeping the best path into each state, day by day.",
+	},
+	["Baum–Welch"] = {
+		module = "hmm",
+		definition = "Learns an HMM's tables from observations alone; a form of expectation-maximization (EM).",
+	},
+	["speech recognition"] = { module = "hmm", definition = "Turning recorded speech into text." },
+	["part-of-speech tagging"] = {
+		module = "hmm",
+		definition = "Labeling each word in a sentence as a noun, verb, adjective and so on.",
+	},
 }
 
 return Glossary
