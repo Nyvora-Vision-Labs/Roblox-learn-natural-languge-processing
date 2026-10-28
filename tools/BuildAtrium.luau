@@ -492,10 +492,11 @@ cc.Contrast = 0.08
 cc.Saturation = -0.1
 cc.Brightness = 0
 
+-- Template effects the Atrium doesn't use
 for _, name in { "SunRays", "DepthOfField" } do
 	local e = Lighting:FindFirstChild(name)
 	if e then
-		(e :: any).Enabled = false
+		e:Destroy()
 	end
 end
 
