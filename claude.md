@@ -87,7 +87,7 @@ src/
     Theme.luau                  design tokens (§6); the only place colors/sizes are defined
     Assets.luau                 asset ids (icons, sounds)
     Lessons/
-      Index.luau                ordered module ids
+      Index.luau                module metadata (title, era) in portal order
       Classifiers.luau  HMM.luau  RNN.luau  Attention.luau  Transformers.luau
       Glossary.luau
     Math/                       pure functions, no instances
@@ -113,9 +113,12 @@ src/
       Cleanup.luau              tracks connections/instances; one call cleans up
       Scale.luau                UIScale + compact mode (§6.2)
       Components/               Button, IconButton, Chip, Slider, Toggle, SegmentedControl,
-                                ProgressBar, Toast, Tooltip, Modal, Callout, FormulaBlock, Legend
+                                ProgressBar, Toast, Tooltip, Modal, Callout, FormulaBlock, Legend,
+                                Glyph (frame-drawn placeholder icons, e.g. the lock)
       Cards/                    one renderer per card kind
       Widgets/                  one file per interactive demo (§7)
+tools/
+  BuildAtrium.luau              not synced; rebuilds the Atrium + portals via execute_luau (Edit)
 ```
 
 ### 4.2 Runtime flow
