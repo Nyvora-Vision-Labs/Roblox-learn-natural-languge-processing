@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-28",
+  "placeId": 114279091823022,
+  "universeId": 10773546594,
+  "baseline": {
+    "persistent": true,
+    "progress": {
+      "seenIntro": false,
+      "modules": {
+        "rnn": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "transformers": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "classifiers": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "attention": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "hmm": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        }
+      },
+      "settings": {
+        "reducedMotion": false,
+        "textScale": 1,
+        "muted": false
+      },
+      "v": 1
+    }
+  },
+  "beforeFirstExit": {
+    "portal1": "COMPLETED",
+    "payload": {
+      "persistent": true,
+      "progress": {
+        "seenIntro": false,
+        "modules": {
+          "rnn": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "transformers": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "classifiers": {
+            "lastCard": 11,
+            "completed": true,
+            "bestScore": 5
+          },
+          "attention": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "hmm": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          }
+        },
+        "settings": {
+          "muted": true,
+          "textScale": 1.15,
+          "reducedMotion": true
+        },
+        "v": 1
+      }
+    },
+    "portal2": "OPEN"
+  },
+  "afterFirstRejoin": {
+    "portal1": "COMPLETED",
+    "payload": {
+      "persistent": true,
+      "progress": {
+        "seenIntro": false,
+        "modules": {
+          "rnn": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "transformers": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "classifiers": {
+            "lastCard": 11,
+            "completed": true,
+            "bestScore": 5
+          },
+          "attention": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "hmm": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          }
+        },
+        "settings": {
+          "reducedMotion": true,
+          "textScale": 1.15,
+          "muted": true
+        },
+        "v": 1
+      }
+    },
+    "portal2": "OPEN"
+  },
+  "beforeSecondExit": {
+    "persistent": true,
+    "progress": {
+      "seenIntro": false,
+      "modules": {
+        "rnn": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "transformers": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "classifiers": {
+          "lastCard": 2,
+          "completed": true,
+          "bestScore": 5
+        },
+        "attention": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        },
+        "hmm": {
+          "lastCard": 1,
+          "completed": false,
+          "bestScore": 0
+        }
+      },
+      "settings": {
+        "reducedMotion": false,
+        "textScale": 1,
+        "muted": false
+      },
+      "v": 1
+    }
+  },
+  "afterSecondRejoin": {
+    "portal1": "COMPLETED",
+    "payload": {
+      "persistent": true,
+      "progress": {
+        "seenIntro": false,
+        "modules": {
+          "rnn": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "transformers": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "classifiers": {
+            "lastCard": 2,
+            "completed": true,
+            "bestScore": 5
+          },
+          "attention": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          },
+          "hmm": {
+            "lastCard": 1,
+            "completed": false,
+            "bestScore": 0
+          }
+        },
+        "settings": {
+          "reducedMotion": false,
+          "textScale": 1,
+          "muted": false
+        },
+        "v": 1
+      }
+    },
+    "portal2": "OPEN"
+  },
+  "lessonAfterSecondRejoin": {
+    "coverHidden": true,
+    "font": 20,
+    "title": "What is classification?",
+    "counter": "2/11"
+  },
+  "checks": {
+    "persistentBackendInAllThreeSessions": true,
+    "firstRestartProgressMatches": true,
+    "secondRestartProgressMatches": true,
+    "originalSettingsRestored": true,
+    "quizResumeStartsAtQuestion1WithNoAnswer": true,
+    "savedConceptCardResumed": true,
+    "portal1Completed": true,
+    "portal2Open": true,
+    "finalOutputEmpty": true
+  },
+  "finalOutput": ""
+}
