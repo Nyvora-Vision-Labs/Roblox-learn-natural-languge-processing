@@ -25,6 +25,9 @@ local META: { [string]: { title: string, era: string } } = {
 local CONTENT: { [string]: string } = {
 	classifiers = "Classifiers",
 	hmm = "HMM",
+	rnn = "RNN",
+	attention = "Attention",
+	transformers = "Transformers",
 }
 
 local Index = {}

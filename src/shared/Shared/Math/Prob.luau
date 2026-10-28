@@ -13,6 +13,25 @@ function Prob.sigmoid(z: number): number
 	return e / (1 + e)
 end
 
+-- softmax(z)ᵢ = e^(zᵢ/τ) / Σⱼ e^(zⱼ/τ). τ (temperature, default 1) > 0; smaller τ is sharper.
+-- Subtracts the max first so large scores never overflow.
+function Prob.softmax(scores: { number }, temperature: number?): { number }
+	local tau = temperature or 1
+	local maxScore = -math.huge
+	for _, z in scores do
+		maxScore = math.max(maxScore, z / tau)
+	end
+	local exps, sum = {}, 0
+	for i, z in scores do
+		exps[i] = math.exp(z / tau - maxScore)
+		sum += exps[i]
+	end
+	for i in exps do
+		exps[i] /= sum
+	end
+	return exps
+end
+
 ---------------------------------------------------------------------------
 -- Naive Bayes (multinomial, binary word counts; Jurafsky & Martin ch. 4)
 ---------------------------------------------------------------------------
