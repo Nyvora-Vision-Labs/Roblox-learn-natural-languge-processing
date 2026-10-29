@@ -5,6 +5,8 @@ Players walk a night-time Atrium with five portals; each opens a full-screen, ha
 Passing a lesson's quiz (4 out of 5) unlocks the next portal. After the fifth, a graduation recap
 plays and every portal lights up.
 
+**Play on Roblox:** [Learn Natural Language Processing](https://www.roblox.com/games/72565218405440/Learn-Natural-Language-Processing)
+
 | Portal | Module | Hands-on widgets |
 | --- | --- | --- |
 | 1 | Naive Bayes & Logistic Regression | SpamDetective, SigmoidLab, TwoWaysToClassify |
@@ -40,4 +42,4 @@ Known gaps:
   verified by layout audits and math checks rather than screenshots; a final visual pass is worthwhile.
 - Not exercised on physical gamepad or touch hardware.
 - The optional `NextToken` widget (§7.6) was not built.
-- Badges and publishing were intentionally left for the owner.
+- Badges were intentionally left optional.
